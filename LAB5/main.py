@@ -8,25 +8,31 @@ def print_sudoku(sudoku):
         print("Invalid")
     else:
         ok = 1
+        print('-' * 25)
         for i in range(9):
             if i % 3 == 0 and i > 0:
-                print('_' * 21)
+                print('-' * 25)
             for j in range(9):
-                if j % 3 == 0 and j > 0:
+
+                if (j % 3 == 0 and j > 0) or j == 0:
                     print("|", end=" ")
 
                 if len(sudoku[(i, j)]) == 1:
                     if (i, j) in grey_frames:
-                        print(Fore.RED + str(sudoku[(i, j)][0]), end=" ")
+                        print(Fore.LIGHTGREEN_EX + str(sudoku[(i, j)][0]), end=" ")
                     else:
                         print(sudoku[(i, j)][0], end=" ")
                 else:
                     ok = 0
                     if (i, j) in grey_frames:
-                        print(Fore.RED + str(0), end=" ")
+                        print(Fore.LIGHTGREEN_EX + str(0), end=" ")
                     else:
                         print(0, end=" ")
+
+                if j == 8:
+                    print("|", end=" ")
             print()
+        print('-' * 25)
         if ok:
             print("Solved")
         print()
@@ -107,9 +113,10 @@ def algorithm(sudoku, emptys):
 
             forward_checking(sudoku_copy, i, j, value)
 
-            result = algorithm(sudoku_copy, get_empty(sudoku_copy))
-            if result is not None:
-                return result
+            #print_sudoku(sudoku_copy)
+            solve = algorithm(sudoku_copy, get_empty(sudoku_copy))
+            if solve is not None:
+                return solve
 
     return None
 
@@ -117,5 +124,5 @@ sudoku = init_sudoku()
 grey_frames = init_grey()
 emptys = get_empty(sudoku)
 print_sudoku(sudoku)
-solution = algorithm(sudoku, emptys)
-print_sudoku(solution)
+final = algorithm(sudoku, emptys)
+print_sudoku(final)
